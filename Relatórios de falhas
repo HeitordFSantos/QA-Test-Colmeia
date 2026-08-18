@@ -1,0 +1,111 @@
+1. Login exibe erro de credencial incorreta mas permite acesso mesmo assim
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com. 
+
+Passos para reproduzir:
+1. Acessar a tela de login.
+2. Preencher email qa@test.com e uma senha.
+3. Clicar em "Entrar".
+
+Resultado atual: Aparece um modal com o texto "Seu login está incorreto, quer continuar?", contendo apenas o botão "Continuar" (sem opção de cancelar ou corrigir os dados). Ao clicar em "Continuar",
+o usuário é autenticado normalmente e redirecionado para /dashboard.
+Resultado esperado: Se as credenciais estão incorretas, o acesso deveria ser bloqueado e o usuário deveria poder corrigir email/senha — sem opção de "continuar" mesmo com erro. 
+Se as credenciais na verdade estavam corretas, a mensagem de erro não deveria aparecer.
+
+Severidade: Crítica (impacto direto na integridade do fluxo de autenticação).
+
+2. Dashboard carrega vazio após o login
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard.
+
+Passos para reproduzir:
+1. Fazer login com sucesso.
+2. Observar a página /dashboard carregada.
+
+Resultado atual: A página exibe apenas a barra superior e um ícone isolado na lateral esquerda. Nenhum conteúdo, widget, resumo ou mensagem de boas-vindas é exibido.
+Resultado esperado: O dashboard deveria exibir conteúdo relevante (resumo, atalhos, dados da campanha, etc.) ou, na ausência de dados, um estado vazio explicativo.
+
+Severidade: Média (não impede o uso do restante do app, mas passa impressão de página quebrada).
+
+3. Aba "Colmeia Forms" não carrega nenhum conteúdo
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard/campanha/colmeia-forms.
+
+Passos para reproduzir:
+1. Fazer login.
+2. No menu lateral "Campanha", clicar em "Colmeia Forms".
+
+Resultado atual: A área de conteúdo fica completamente em branco — sem título, sem tabela, sem indicador de carregamento e sem mensagem de "nenhum item encontrado".
+Resultado esperado: A página deveria exibir algum conteúdo (formulários existentes) ou, no mínimo, um estado vazio com mensagem, seguindo o padrão usado em "Bancos de dados".
+
+Severidade: Alta (funcionalidade parece não implementada ou falhando silenciosamente).
+
+4. Botão de Arquivar no "Banco de Dados" exclui o banco
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard/campanha/bancos-de-dados.
+
+Passos para reproduzir:
+1. Acessar "Bancos de dados" no menu "Campanha".
+2. Clicar no botão arquivar de um banco pré-existente.
+3. Clicar na aba "Arquivados"
+4. Observar se o banco criado aparece
+
+Resultado atual: Após clicar em arquivar em um banco de dados existente, o mesmo é excluído, ou arquivado em outro local, mas sem nenhum aviso e já não sendo mais acessível para o usuário
+Resultado esperado: Após arquivar um banco, ele deveria ficar disponível na página "Arquivados" e vísivel para o usuário.
+
+Severidade: Alta (Comportamento causa perda de arquivos).
+
+5. Menu de perfil ("Candidato") no canto superior direito não abre
+
+Ambiente: Google Chrome (desktop), qualquer página logada do app.
+
+Passos para reproduzir:
+1. Fazer login.
+2. Clicar no ícone de usuário / texto "Candidato" / seta no canto superior direito, em qualquer tela do app.
+
+Resultado atual: Nenhum dropdown ou menu é exibido, em nenhuma das tentativas registradas no vídeo. Não há como visualizar dados da conta nem fazer logout.
+Resultado esperado: O clique deveria abrir um menu suspenso com opções como dados da conta, configurações e "Sair/Deslogar".
+
+Severidade: Crítica (usuário fica sem forma de encerrar a sessão pela interface).
+
+
+6. Tela não permite rolagem para visualizar todos os bancos de dados criados
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard/campanha/bancos-de-dados.
+
+Passos para reproduzir:
+1. Acessar "Bancos de dados" no menu "Campanha".
+2. Criar vários itens (quantidade suficiente para ultrapassar a altura visível da tabela).
+3. Tentar rolar a tela para baixo para ver os itens que ficaram fora da área visível.
+
+Resultado atual: Não é possível rolar a página/tabela. Os itens criados além da altura visível ficam inacessíveis, mesmo existindo na lista.
+Resultado esperado: A tabela deveria ter rolagem própria (scroll interno) ou a página deveria permitir scroll geral, garantindo acesso a todos os itens cadastrados.
+Idealmente também com paginação para listas grandes.
+
+Severidade: Alta (dados existem mas ficam inacessíveis pela interface).
+
+7. Botão "Atualizar" apaga todos os bancos de dados da lista
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard/campanha/bancos-de-dados.
+
+Passos para reproduzir:
+1. Acessar "Bancos de dados" com um ou mais itens já cadastrados.
+2. Clicar no ícone de atualizar (refresh) ao lado do botão "Criar".
+
+Resultado atual: Todos os bancos de dados somem da lista, exibindo "Nenhum banco de dados encontrado" — sem que os itens tenham sido de fato excluídos ou sem indicação clara do que ocorreu.
+Resultado esperado: O botão "Atualizar" deveria apenas buscar novamente os dados atuais da lista (recarregar), mantendo todos os itens existentes visíveis — sem apagar ou ocultar nenhum registro.
+
+Severidade: Crítica (ação de "atualizar", que deveria ser segura, causa perda aparente de dados).
+
+8. Excluir item não pede confirmação
+
+Ambiente: Google Chrome (desktop), URL teste-colmeia-qa.colmeia-corp.com/dashboard/campanha/bancos-de-dados.
+
+Passos para reproduzir:
+1. Acessar "Bancos de dados" com pelo menos um item cadastrado.
+2. Clicar no ícone de lixeira (excluir) ao lado de um item.
+
+Resultado atual: O item é excluído imediatamente, sem nenhum modal ou aviso de confirmação.
+Resultado esperado: Ao clicar em excluir, deveria aparecer uma confirmação (ex: "Tem certeza que deseja excluir este item?") antes da exclusão ser efetivada, evitando perda acidental de dados.
+
+Severidade: Alta (ação destrutiva e irreversível sem proteção contra clique acidental).
